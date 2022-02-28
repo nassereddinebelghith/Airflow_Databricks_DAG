@@ -1,0 +1,2 @@
+yfinance
+apache-airflow-providers-databricks==2.0.2

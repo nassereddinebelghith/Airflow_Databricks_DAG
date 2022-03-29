@@ -22,15 +22,15 @@ from datetime import datetime, timedelta
 # https://airflow.apache.org/docs/apache-airflow-providers-databricks/stable/operators.html#databricksrunnowoperator
 
 
-existing_cluster_id = "0222-192411-cnzydi8s"
 
 
+DATABRICKS_CLUSTER_ID = "0222-192411-cnzydi8s"
 notebook_task = {
-    "notebook_path": "/Shared/dag-workshop",
+    "notebook_path": "/Shared/data_analyst_dag_scrap",
 }
 
-# Define params for Run Now Operator
-notebook_params = {"Variable": 5}
+# # Define params for Run Now Operator
+# notebook_params = {"Variable": 5}
 
 
 with DAG(
@@ -47,15 +47,16 @@ with DAG(
     opr_submit_run = DatabricksSubmitRunOperator(
         task_id="start_cluster",
         databricks_conn_id="databricks",
-        existing_cluster_id=existing_cluster_id,
+        existing_cluster_id=DATABRICKS_CLUSTER_ID,
         notebook_task=notebook_task,
     )
 
     opr_run_now = DatabricksRunNowOperator(
         task_id="run_now",
         databricks_conn_id="databricks",
-        job_id=368,
-        notebook_params=notebook_params,
+        job_id=1087568806385694,
+        # notebook_params=notebook_params,
+        do_xcom_push=True ####
     )
 
 

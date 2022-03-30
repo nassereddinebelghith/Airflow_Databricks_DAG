@@ -7,16 +7,14 @@ from airflow.providers.databricks.operators.databricks import (
     DatabricksSubmitRunOperator,
     DatabricksRunNowOperator,
 )
-# from include.databricks_helper import get_notebook_output
-
+from airflow.providers.snowflake.hooks.snowflake import SnowflakeHook
+from airflow.providers.snowflake.operators.snowflake import SnowflakeOperator
 
 
 
 from datetime import datetime, timedelta
 
-# https://docs.databricks.com/workspace/workspace-details.html#job-url-and-id
-# https://airflow.apache.org/docs/apache-airflow-providers-databricks/stable/operators.html
-# https://airflow.apache.org/docs/apache-airflow-providers-databricks/stable/operators.html#databricksrunnowoperator
+
 
 
 
@@ -27,8 +25,16 @@ notebook_task = {
     "notebook_path": "/Shared/data_analyst_dag_scrap",
 }
 
-# # Define params for Run Now Operator
-# notebook_params = {"Variable": 5}
+
+SQL_INSERT_STATEMENT=0
+SNOWFLAKE_WAREHOUSE=1
+SNOWFLAKE_DATABASE=2
+SNOWFLAKE_SCHEMA=3
+SNOWFLAKE_ROLE=4
+
+
+
+
 
 
 with DAG(
@@ -56,35 +62,29 @@ with DAG(
         do_xcom_push=True
     )
 
+
     @task
     def register_model(databricks_run_id: str):
-
-
         databricks_hook = DatabricksHook()
         model_uri = databricks_hook.get_run_output(databricks_run_id)['notebook_output']['result']
 
 
+    # inserting data from model_uri to snowflake
+    snowflake_op_with_params = SnowflakeOperator(
+        task_id='snowflake_op_with_params',
+        dag=dag,
+        sql=SQL_INSERT_STATEMENT,
+        parameters={"id": 56},
+        warehouse=SNOWFLAKE_WAREHOUSE,
+        database=SNOWFLAKE_DATABASE,
+        schema=SNOWFLAKE_SCHEMA,
+        role=SNOWFLAKE_ROLE,
+    )
 
-    # command = "curl --netrc --get https://dbc-0eb40f15-5780.cloud.databricks.com/api/2.0/jobs/runs/get-output --data run_id=3841"
+
+    # operator to refresh BI tool with new snowflake data
+
+
+    opr_submit_run >> opr_run_now >> register_model(opr_run_now.output['run_id']) >> snowflake_op_with_params
     
-    # capture_output = BashOperator(
-    # task_id='capture_output',
-    # bash_command=command
-    # )
-
-
-
-
-
-    # capture_data =  DatabricksHook(
-    #     databricks_conn_id = DATABRICKS_CONNECTION_ID
-    # )
-
-
-
-    opr_submit_run >> opr_run_now
-    # print(opr_run_now.output['run_id'])
-
-    register_model(opr_run_now.output['run_id'])
-
-# model_uri = get_notebook_output(databricks_run_id)
+# snowflake_op_with_params

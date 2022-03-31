@@ -26,11 +26,21 @@ notebook_task = {
 }
 
 
-SQL_INSERT_STATEMENT=0
-SNOWFLAKE_WAREHOUSE=1
-SNOWFLAKE_DATABASE=2
-SNOWFLAKE_SCHEMA=3
-SNOWFLAKE_ROLE=4
+SQL_INSERT_STATEMENT="""
+
+INSERT INTO SCRAP (Name, Value) 
+VALUES ('test', '1');
+
+"""
+
+
+
+
+
+SNOWFLAKE_WAREHOUSE="DEMO"
+SNOWFLAKE_DATABASE="SANDBOX"
+SNOWFLAKE_SCHEMA="AMIRZAHREDDINE"
+SNOWFLAKE_ROLE="AMIRZAHREDDINE"
 
 
 
@@ -56,7 +66,7 @@ with DAG(
     )
 
     opr_run_now = DatabricksRunNowOperator(
-        task_id="run_now",
+        task_id="run_job",
         databricks_conn_id=DATABRICKS_CONNECTION_ID,
         job_id=1087568806385694,
         do_xcom_push=True
@@ -74,7 +84,6 @@ with DAG(
         task_id='snowflake_op_with_params',
         dag=dag,
         sql=SQL_INSERT_STATEMENT,
-        parameters={"id": 56},
         warehouse=SNOWFLAKE_WAREHOUSE,
         database=SNOWFLAKE_DATABASE,
         schema=SNOWFLAKE_SCHEMA,
@@ -82,7 +91,16 @@ with DAG(
     )
 
 
-    # operator to refresh BI tool with new snowflake data
+
+# https://airflow.apache.org/docs/apache-airflow-providers-snowflake/stable/_modules/airflow/providers/snowflake/example_dags/example_snowflake.html
+
+# operator to refresh BI tool with new snowflake data
+
+# SNOWFLAKE_SLACK_MESSAGE = (
+#     "Results in an ASCII table:\n```{{ results_df | tabulate(tablefmt='pretty', headers='keys') }}```"
+# )
+
+
 
 
     opr_submit_run >> opr_run_now >> register_model(opr_run_now.output['run_id']) >> snowflake_op_with_params

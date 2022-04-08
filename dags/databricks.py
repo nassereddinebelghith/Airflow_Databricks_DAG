@@ -70,7 +70,7 @@ with DAG(
         task_id='mail',
         to='amir.zahreddine@astronomer.io',
         subject='Daily Movers',
-        html_content="<b><h1> {{ task_instance.xcom_pull(task_ids='retrieve_xcom') }} </h1></b>",
+        html_content="{{ task_instance.xcom_pull(task_ids='retrieve_xcom') }}",
         )
 
 

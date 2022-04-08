@@ -9,7 +9,7 @@ from airflow.operators.email_operator import EmailOperator
 # email_backend = airflow.utils.email.send_email_smtp
 
 with DAG(
-    "databricks_dag",
+    "mail_test",
     start_date=datetime(2021, 1, 1),
     schedule_interval="@daily",
     catchup=False,
@@ -20,11 +20,11 @@ with DAG(
 ) as dag:
 
 
-    mail = EmailOperator(
+    mail_test = EmailOperator(
         task_id='mail',
         to='amir.zahreddine@astronomer.io',
         subject='Daily Movers',
         html_content="""<h3>Email Test</h3>"""
     )
 
-mail
+    mail_test

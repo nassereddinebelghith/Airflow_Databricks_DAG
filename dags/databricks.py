@@ -14,31 +14,22 @@ from airflow.operators.email_operator import EmailOperator
 
 from datetime import datetime, timedelta
 
-
-
-
-
-
 DATABRICKS_CLUSTER_ID = "0222-192411-cnzydi8s"
 DATABRICKS_CONNECTION_ID = "databricks_default"
 notebook_task = {
     "notebook_path": "/Shared/data_analyst_dag_scrap",
 }
 
+# SQL_INSERT_STATEMENT="""
 
-SQL_INSERT_STATEMENT="""
+# INSERT INTO SCRAP (Name, Value) 
+# VALUES ('test', '1');
 
-INSERT INTO SCRAP (Name, Value) 
-VALUES ('test', '1');
-
-"""
-SNOWFLAKE_WAREHOUSE="DEMO"
-SNOWFLAKE_DATABASE="SANDBOX"
-SNOWFLAKE_SCHEMA="AMIRZAHREDDINE"
-SNOWFLAKE_ROLE="AMIRZAHREDDINE"
-
-
-
+# """
+# SNOWFLAKE_WAREHOUSE="DEMO"
+# SNOWFLAKE_DATABASE="SANDBOX"
+# SNOWFLAKE_SCHEMA="AMIRZAHREDDINE"
+# SNOWFLAKE_ROLE="AMIRZAHREDDINE"
 
 
 
@@ -74,27 +65,13 @@ with DAG(
         model_uri = databricks_hook.get_run_output(databricks_run_id)['notebook_output']['result']
         return model_uri
 
-
-    # mail = EmailOperator(
-    #     task_id='mail',
-    #     to='amir.zahreddine@astronomer.io',
-    #     subject='Daily Movers',
-    #     html_content="<b><h1> {{ task_instance.xcom_pull(task_ids='retrieve_xcom') }} </h1></b>",
-    #     provide_context=True)  # puller needs provide_context
-
-#xcom pull within the email operator
-## takes task context (details)
-## use email operator
+    # send email
+    mail = EmailOperator(
+        task_id='mail',
+        to='amir.zahreddine@astronomer.io',
+        subject='Daily Movers',
+        html_content="<b><h1> {{ task_instance.xcom_pull(task_ids='retrieve_xcom') }} </h1></b>",
+        )
 
 
-
-
-# https://airflow.apache.org/docs/apache-airflow-providers-snowflake/stable/_modules/airflow/providers/snowflake/example_dags/example_snowflake.html
-
-
-
-
-
-    opr_submit_run >> opr_run_now >> retrieve_xcom(opr_run_now.output['run_id']) 
-    
-# snowflake_op_with_params
+    opr_submit_run >> opr_run_now >> retrieve_xcom(opr_run_now.output['run_id']) >> mail

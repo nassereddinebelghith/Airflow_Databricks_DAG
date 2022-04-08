@@ -24,7 +24,7 @@ with DAG(
         task_id='mail',
         to='amir.zahreddine@astronomer.io',
         subject='Daily Movers',
-        html_content="""<h3>Email Test</h3>"""
+        html_content="""Email Test"""
     )
 
     mail_test

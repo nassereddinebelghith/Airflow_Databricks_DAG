@@ -7,9 +7,9 @@ from airflow.providers.databricks.operators.databricks import (
     DatabricksSubmitRunOperator,
     DatabricksRunNowOperator,
 )
-from airflow.providers.snowflake.hooks.snowflake import SnowflakeHook
-from airflow.providers.snowflake.operators.snowflake import SnowflakeOperator
-
+# from airflow.providers.snowflake.hooks.snowflake import SnowflakeHook
+# from airflow.providers.snowflake.operators.snowflake import SnowflakeOperator
+from airflow.operators.email_operator import EmailOperator
 
 
 from datetime import datetime, timedelta
@@ -32,11 +32,6 @@ INSERT INTO SCRAP (Name, Value)
 VALUES ('test', '1');
 
 """
-
-
-
-
-
 SNOWFLAKE_WAREHOUSE="DEMO"
 SNOWFLAKE_DATABASE="SANDBOX"
 SNOWFLAKE_SCHEMA="AMIRZAHREDDINE"
@@ -68,41 +63,38 @@ with DAG(
     opr_run_now = DatabricksRunNowOperator(
         task_id="run_job",
         databricks_conn_id=DATABRICKS_CONNECTION_ID,
-        job_id=1087568806385694,
+        job_id=137122987688189,
         do_xcom_push=True
     )
 
-
+    # get value from databricks from xcom
     @task
-    def register_model(databricks_run_id: str):
+    def retrieve_xcom(databricks_run_id: str):
         databricks_hook = DatabricksHook()
         model_uri = databricks_hook.get_run_output(databricks_run_id)['notebook_output']['result']
+        return model_uri
 
 
-    # inserting data from model_uri to snowflake
-    snowflake_op_with_params = SnowflakeOperator(
-        task_id='snowflake_op_with_params',
-        dag=dag,
-        sql=SQL_INSERT_STATEMENT,
-        warehouse=SNOWFLAKE_WAREHOUSE,
-        database=SNOWFLAKE_DATABASE,
-        schema=SNOWFLAKE_SCHEMA,
-        role=SNOWFLAKE_ROLE,
-    )
+    # mail = EmailOperator(
+    #     task_id='mail',
+    #     to='amir.zahreddine@astronomer.io',
+    #     subject='Daily Movers',
+    #     html_content="<b><h1> {{ task_instance.xcom_pull(task_ids='retrieve_xcom') }} </h1></b>",
+    #     provide_context=True)  # puller needs provide_context
+
+#xcom pull within the email operator
+## takes task context (details)
+## use email operator
+
 
 
 
 # https://airflow.apache.org/docs/apache-airflow-providers-snowflake/stable/_modules/airflow/providers/snowflake/example_dags/example_snowflake.html
 
-# operator to refresh BI tool with new snowflake data
-
-# SNOWFLAKE_SLACK_MESSAGE = (
-#     "Results in an ASCII table:\n```{{ results_df | tabulate(tablefmt='pretty', headers='keys') }}```"
-# )
 
 
 
 
-    opr_submit_run >> opr_run_now >> register_model(opr_run_now.output['run_id']) >> snowflake_op_with_params
+    opr_submit_run >> opr_run_now >> retrieve_xcom(opr_run_now.output['run_id']) 
     
 # snowflake_op_with_params

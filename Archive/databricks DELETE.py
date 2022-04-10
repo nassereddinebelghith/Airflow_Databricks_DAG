@@ -20,15 +20,18 @@ notebook_task = {
     "notebook_path": "/Shared/dag-workshop",
 }
 
+# SQL_INSERT_STATEMENT="""
 
-# specifying which companies I'd like data from (by using their stock tickers)
-# portfolio2 = ['MSFT', 'AAPL', 'IBM', 'WMT', 'SHOP', 'LWLG', 'ALB', 'LYV', 'GOOGL', 'TTGT', 'TSLA', 'GME', 'AMZN', 'TGT', 'COST', 'COKE','TPL', 'BX', 'MORN', 'CBRE', 
-#             'NVDA', 'AMD', 'NEE']
-# portfolio = ['SHOP', 'MSFT'] # reduced portfolio to make script quicker (pre prod, less api calls)
+# INSERT INTO SCRAP (Name, Value) 
+# VALUES ('test', '1');
 
-portfolio = {
-            "stocks": "AMD NEE"
-            }
+# """
+# SNOWFLAKE_WAREHOUSE="DEMO"
+# SNOWFLAKE_DATABASE="SANDBOX"
+# SNOWFLAKE_SCHEMA="AMIRZAHREDDINE"
+# SNOWFLAKE_ROLE="AMIRZAHREDDINE" ['COKE', 'WMT', 'IBM', 'WMT', 'SHOP']
+
+
 
 with DAG(
     "databricks_dag",
@@ -41,23 +44,23 @@ with DAG(
     },
 ) as dag:
 
-    # opr_submit_run = DatabricksSubmitRunOperator(
-    #     task_id="start_cluster",
-    #     databricks_conn_id=DATABRICKS_CONNECTION_ID,
-    #     existing_cluster_id=DATABRICKS_CLUSTER_ID,
-    #     notebook_task = notebook_task
-
-    # )
+    opr_submit_run = DatabricksSubmitRunOperator(
+        task_id="start_cluster",
+        databricks_conn_id=DATABRICKS_CONNECTION_ID,
+        existing_cluster_id=DATABRICKS_CLUSTER_ID,
+        notebook_task={
+            'notebook_path': "/Shared/dag-workshop",
+            'base_parameters': {
+                'portfolio': 'SHOP'
+            }
+        }
+    )
 
     opr_run_now = DatabricksRunNowOperator(
         task_id="run_job",
         databricks_conn_id=DATABRICKS_CONNECTION_ID,
         job_id=137122987688189,
-        do_xcom_push=True,
-        notebook_params = portfolio
-# 137122987688189
-# test 1087568806385694
-        
+        do_xcom_push=True
     )
 
     # get value from databricks from xcom
@@ -75,5 +78,5 @@ with DAG(
         html_content="{{ task_instance.xcom_pull(task_ids='retrieve_xcom') }}",
         )
 
-#    opr_submit_run >> 
-opr_run_now >> retrieve_xcom(opr_run_now.output['run_id']) >> mail
+
+    opr_submit_run >> opr_run_now >> retrieve_xcom(opr_run_now.output['run_id']) >> mail

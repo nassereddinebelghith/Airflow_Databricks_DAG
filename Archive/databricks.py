@@ -26,9 +26,7 @@ notebook_task = {
 #             'NVDA', 'AMD', 'NEE']
 # portfolio = ['SHOP', 'MSFT'] # reduced portfolio to make script quicker (pre prod, less api calls)
 
-portfolio = {
-            "stocks": "AMD NEE"
-            }
+
 
 with DAG(
     "databricks_dag",
@@ -52,11 +50,12 @@ with DAG(
     opr_run_now = DatabricksRunNowOperator(
         task_id="run_job",
         databricks_conn_id=DATABRICKS_CONNECTION_ID,
-        job_id=137122987688189,
+        job_id=1087568806385694,
         do_xcom_push=True,
-        notebook_params = portfolio
+        notebook_params = {
+                "stocks": "MSFT AAPL"
+                }
 # 137122987688189
-# test 1087568806385694
         
     )
 

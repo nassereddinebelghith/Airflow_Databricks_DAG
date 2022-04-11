@@ -27,13 +27,15 @@ notebook_task = {
 # portfolio = ['SHOP', 'MSFT'] # reduced portfolio to make script quicker (pre prod, less api calls)
 
 portfolio = {
-            "stocks": "AMD NEE"
+            "stocks": "MSFT AAPL IBM WMT SHOP GOOGL TSLA GME AMZN COST COKE CBRE NVDA AMD PG"
             }
+
+
 
 with DAG(
     "databricks_dag",
     start_date=datetime(2021, 1, 1),
-    schedule_interval="@daily",
+    schedule_interval='2 1 * * *',
     catchup=False,
     default_args={
         "email_on_failure": False,

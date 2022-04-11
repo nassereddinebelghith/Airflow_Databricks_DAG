@@ -7,8 +7,7 @@ from airflow.providers.databricks.operators.databricks import (
     DatabricksSubmitRunOperator,
     DatabricksRunNowOperator,
 )
-# from airflow.providers.snowflake.hooks.snowflake import SnowflakeHook
-# from airflow.providers.snowflake.operators.snowflake import SnowflakeOperator
+
 from airflow.operators.email_operator import EmailOperator
 
 
@@ -21,10 +20,6 @@ notebook_task = {
 }
 
 
-# specifying which companies I'd like data from (by using their stock tickers)
-# portfolio2 = ['MSFT', 'AAPL', 'IBM', 'WMT', 'SHOP', 'LWLG', 'ALB', 'LYV', 'GOOGL', 'TTGT', 'TSLA', 'GME', 'AMZN', 'TGT', 'COST', 'COKE','TPL', 'BX', 'MORN', 'CBRE', 
-#             'NVDA', 'AMD', 'NEE']
-# portfolio = ['SHOP', 'MSFT'] # reduced portfolio to make script quicker (pre prod, less api calls)
 
 portfolio = {
             "stocks": "MSFT AAPL IBM WMT SHOP GOOGL TSLA GME AMZN COST COKE CBRE NVDA AMD PG"
@@ -35,7 +30,7 @@ portfolio = {
 with DAG(
     "databricks_dag",
     start_date=datetime(2021, 1, 1),
-    schedule_interval='2 1 * * *',
+    schedule_interval='2 1 * * 1-5',
     catchup=False,
     default_args={
         "email_on_failure": False,

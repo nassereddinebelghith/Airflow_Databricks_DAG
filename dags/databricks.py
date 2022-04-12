@@ -14,7 +14,7 @@ portfolio = {
 with DAG(
     "databricks_dag",
     start_date=datetime(2021, 1, 1),
-    schedule_interval='2 1 * * 1-5',
+    schedule_interval='1 4 * * 1-5',
     catchup=False,
     default_args={
         "email_on_failure": False,

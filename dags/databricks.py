@@ -14,12 +14,8 @@ today = date.today().strftime("%d/%m/%Y")
 DATABRICKS_CONNECTION_ID = "databricks_default"
 
 portfolio = {
-            # "stocks": "MSFT AMD"
-
             "stocks": "MSFT AAPL IBM WMT SHOP GOOGL TSLA GME AMZN COST COKE CBRE NVDA AMD PG"
             }
-            
-
 
 def _split(data):
         if data == "Don't send email":
@@ -27,8 +23,6 @@ def _split(data):
             return 'no_mail'
         else:
             return 'mail'
-
-
 
 with DAG(
     "databricks_dag",
@@ -69,9 +63,7 @@ with DAG(
 
         return email
 
-
     output = retrieve_xcom(opr_run_now.output['run_id'])
-
 
     branching = BranchPythonOperator(
         task_id='branch',
@@ -90,7 +82,5 @@ with DAG(
         subject='Daily Movers',
         html_content=output,
         )
-
-
 
 opr_run_now >> output >> branching >> [no_mail, mail]

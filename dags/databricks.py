@@ -3,13 +3,20 @@ from airflow.decorators import task
 from airflow.providers.databricks.hooks.databricks import DatabricksHook
 from airflow.providers.databricks.operators.databricks import DatabricksRunNowOperator
 from airflow.operators.email_operator import EmailOperator
-from datetime import datetime
+from datetime import datetime, date
+import ast
+
+
+today = date.today().strftime("%d/%m/%Y")
 
 DATABRICKS_CONNECTION_ID = "databricks_default"
 
 portfolio = {
-            "stocks": "MSFT AAPL IBM WMT SHOP GOOGL TSLA GME AMZN COST COKE CBRE NVDA AMD PG"
+            "stocks": "MSFT AMD"
+
+            # "stocks": "MSFT AAPL IBM WMT SHOP GOOGL TSLA GME AMZN COST COKE CBRE NVDA AMD PG"
             }
+
 
 with DAG(
     "databricks_dag",
@@ -33,17 +40,34 @@ with DAG(
 
     # retreive xcom data from databricks endpoint
     @task
-    def retrieve_xcom(databricks_run_id: str):
+    def retrieve_xcom(id):
         databricks_hook = DatabricksHook()
-        model_uri = databricks_hook.get_run_output(databricks_run_id)['notebook_output']['result']
-        return model_uri
+        model_uri = databricks_hook.get_run_output(id)['notebook_output']['result']
+
+        substring = "[]"
+        if substring in model_uri:
+            email = "There were no big movers today."
+        else:
+            # convert string to list
+            model_uri = ast.literal_eval(model_uri)
+            # parse list to retreive desired information (its contents)
+            model_uri = [item for sublist in model_uri for item in sublist]
+            model_uri = ' '.join(str(e) for e in model_uri)
+            # output email content
+            email = "Big movers for today, {today}, are: {df}".format(today = today, df=model_uri)
+            
+        return email
+
+    output = retrieve_xcom(opr_run_now.output['run_id'])
+
 
     # send email
     mail = EmailOperator(
         task_id='mail',
         to='amir.zahreddine@astronomer.io',
         subject='Daily Movers',
-        html_content="{{ task_instance.xcom_pull(task_ids='retrieve_xcom') }}",
+        html_content=output,
         )
 
-opr_run_now >> retrieve_xcom(opr_run_now.output['run_id']) >> mail
+
+opr_run_now >> output >> mail

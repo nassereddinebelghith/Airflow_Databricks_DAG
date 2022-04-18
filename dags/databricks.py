@@ -18,8 +18,8 @@ portfolio = {
             }
 
 def _split(data):
-        if data == "Don't send email":
-            print("No big movers, no email was sent")
+        if data == "No Email Required":
+            print("LOG: No big movers, no email was sent")
             return 'no_mail'
         else:
             return 'mail'
@@ -37,7 +37,7 @@ with DAG(
 
     # run the databricks job
     opr_run_now = DatabricksRunNowOperator(
-        task_id="run_job",
+        task_id="Run_Databricks_Job",
         databricks_conn_id=DATABRICKS_CONNECTION_ID,
         job_id=137122987688189,
         do_xcom_push=True,
@@ -45,7 +45,7 @@ with DAG(
     )
 
     @task
-    def retrieve_xcom(id):
+    def Retreive_Databricks_Output(id):
 
         # retreive xcom data using DatabricksHook
         databricks_hook = DatabricksHook()
@@ -54,7 +54,7 @@ with DAG(
         # conditional statement to decide on the content of the emails
         substring = "[]"
         if substring in model_uri:
-            email = "Don't send email"
+            email = "No Email Required"
         else:
             model_uri = ast.literal_eval(model_uri) # convert string to list
             model_uri = [item for sublist in model_uri for item in sublist] # parse list to retreive desired information (its contents)
@@ -63,21 +63,21 @@ with DAG(
 
         return email
 
-    output = retrieve_xcom(opr_run_now.output['run_id'])
+    output = Retreive_Databricks_Output(opr_run_now.output['run_id'])
 
     branching = BranchPythonOperator(
-        task_id='branch',
+        task_id='Check_if_Email_is_Needed',
         op_args = [output],
         python_callable=_split,
     )
 
     no_mail = DummyOperator(
-        task_id='no_mail'
+        task_id="No_Email_Required"
     )
 
     # send email
     mail = EmailOperator(
-        task_id='mail',
+        task_id='Send_Email',
         to='amir.zahreddine@astronomer.io',
         subject='Daily Movers',
         html_content=output,

@@ -35,7 +35,7 @@ with DAG(
     },
 ) as dag:
 
-    # run the databricks job
+    # Run the Databricks job and retrieve the job Run ID
     opr_run_now = DatabricksRunNowOperator(
         task_id="Run_Databricks_Job",
         databricks_conn_id=DATABRICKS_CONNECTION_ID,
@@ -51,31 +51,37 @@ with DAG(
         databricks_hook = DatabricksHook()
         model_uri = databricks_hook.get_run_output(id)['notebook_output']['result']
 
-        # conditional statement to decide on the content of the emails
-        substring = "[]"
+        # Conditional statement to decide on the content of the emails
+        substring = "[]" ## empty list is returned if stock price change is minor
         if substring in model_uri:
             email = "No Email Required"
         else:
-            model_uri = ast.literal_eval(model_uri) # convert string to list
-            model_uri = [item for sublist in model_uri for item in sublist] # parse list to retreive desired information (its contents)
+
+            # Transform and extract the content of the xcom, retreiving the stock and price change for the day
+            model_uri = ast.literal_eval(model_uri) ## convert string to list
+            model_uri = [item for sublist in model_uri for item in sublist] ## parse list to retreive desired information (its contents)
             model_uri = ' '.join(str(e) for e in model_uri)
-            email = "Big movers for today, {today}, are: {df}".format(today = today, df=model_uri) # output email content
+            email = "Big movers for today, {today}, are: {df}".format(today = today, df=model_uri) ## output email content
 
         return email
 
-    output = Retreive_Databricks_Output(opr_run_now.output['run_id'])
+    output = Retreive_Databricks_Output(opr_run_now.output['run_id']) # Variable "Output" contains the xcom data from Databricks
 
+
+    # Decide as to whether or not an email should be sent based on the content of Output
     branching = BranchPythonOperator(
         task_id='Check_if_Email_is_Needed',
         op_args = [output],
         python_callable=_split,
     )
 
+    # Don't sent email
     no_mail = DummyOperator(
         task_id="No_Email_Required"
     )
 
-    # send email
+
+    # Send email containing the content of the xcom
     mail = EmailOperator(
         task_id='Send_Email',
         to='amir.zahreddine@astronomer.io',

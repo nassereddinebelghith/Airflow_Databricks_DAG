@@ -20,9 +20,9 @@ portfolio = {
 def _split(data):
         if data == "No Email Required":
             print("LOG: No big movers, no email was sent")
-            return 'no_mail'
+            return 'No_Email_Required'
         else:
-            return 'mail'
+            return 'Send_Email'
 
 with DAG(
     "databricks_dag",
@@ -86,7 +86,7 @@ with DAG(
         task_id='Send_Email',
         to='amir.zahreddine@astronomer.io',
         subject='Daily Movers',
-        html_content=output,
+        html_content="output",
         )
 
 opr_run_now >> output >> branching >> [no_mail, mail]

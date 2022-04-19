@@ -18,11 +18,11 @@ portfolio = {
             }
 
 def _split(data):
-        if data == "No Email Required":
-            print("LOG: No big movers, no email was sent")
-            return 'No_Email_Required'
-        else:
-            return 'Send_Email'
+    if data == "No Email Required":
+        print("LOG: No big movers, no email was sent")
+        return 'No_Email_Required'
+    else:
+        return 'Send_Email'
 
 with DAG(
     "databricks_dag",
@@ -54,18 +54,19 @@ with DAG(
         # Conditional statement to decide on the content of the emails
         substring = "[]" ## empty list is returned if stock price change is minor
         if substring in model_uri:
-            email = "No Email Required"
+            result = "No Email Required"
         else:
 
             # Transform and extract the content of the xcom, retreiving the stock and price change for the day
             model_uri = ast.literal_eval(model_uri) ## convert string to list
             model_uri = [item for sublist in model_uri for item in sublist] ## parse list to retreive desired information (its contents)
             model_uri = ' '.join(str(e) for e in model_uri)
-            email = "Big movers for today, {today}, are: {df}".format(today = today, df=model_uri) ## output email content
+            result = "Big movers for today, {today}, are: {df}".format(today = today, df=model_uri) ## output email content
 
-        return email
+        return result
 
-    output = Retreive_Databricks_Output(opr_run_now.output['run_id']) # Variable "Output" contains the xcom data from Databricks
+    # Variable "Output" contains the xcom data from Databricks
+    output = Retreive_Databricks_Output(opr_run_now.output['run_id'])
 
 
     # Decide as to whether or not an email should be sent based on the content of Output

@@ -80,13 +80,12 @@ with DAG(
         task_id="No_Email_Required"
     )
 
-
     # Send email containing the content of the xcom
     mail = EmailOperator(
         task_id='Send_Email',
         to='amir.zahreddine@astronomer.io',
         subject='Daily Movers',
-        html_content="output",
+        html_content=output,
         )
 
 opr_run_now >> output >> branching >> [no_mail, mail]

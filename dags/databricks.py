@@ -36,7 +36,7 @@ with DAG(
 ) as dag:
 
     # Run the Databricks job and retrieve the job Run ID
-    opr_run_now = DatabricksRunNowOperator(
+    run_databricks_job = DatabricksRunNowOperator(
         task_id="Run_Databricks_Job",
         databricks_conn_id=DATABRICKS_CONNECTION_ID,
         job_id=137122987688189,
@@ -66,17 +66,17 @@ with DAG(
         return result
 
     # Variable "Output" contains the xcom data from Databricks
-    output = Retreive_Databricks_Output(opr_run_now.output['run_id'])
+    retreive_databricks_output = Retreive_Databricks_Output(run_databricks_job.output['run_id'])
 
 
     # Decide as to whether or not an email should be sent based on the content of Output
     branching = BranchPythonOperator(
         task_id='Check_if_Email_is_Needed',
-        op_args = [output],
+        op_args = [retreive_databricks_output],
         python_callable=_split,
     )
 
-    # Don't sent email
+    # Don't sent email, do nothing
     no_mail = DummyOperator(
         task_id="No_Email_Required"
     )
@@ -86,7 +86,7 @@ with DAG(
         task_id='Send_Email',
         to='amir.zahreddine@astronomer.io',
         subject='Daily Movers',
-        html_content=output,
+        html_content=retreive_databricks_output,
         )
 
-opr_run_now >> output >> branching >> [no_mail, mail]
+run_databricks_job >> retreive_databricks_output >> branching >> [no_mail, mail]

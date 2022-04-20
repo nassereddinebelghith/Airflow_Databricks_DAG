@@ -1,3 +1,3 @@
-## Databricks & Sigma Data Analyst Example with Airflow
+## Databricks Data Analyst Example with Airflow
 
-### ADD DETAILS
+The repository for the Astronomer.io Data Analyst DAG by Santona Tuli and Amir Zahreddine.

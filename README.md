@@ -36,6 +36,8 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+  
+[![diagram]](#)  
 
 Databricks is powerful, as is Apache Airflow. Together, they make a compelling use case for a well-rounded, all-you-need stack for many of your data pipeline needs. This project showcases the utilization of Databricks to extract, manipulate, and upsert data into its Delta Table infrastructure, all nicely wrapped (and automated!) with Apache Airflow.
 
@@ -47,7 +49,11 @@ Databricks is powerful, as is Apache Airflow. Together, they make a compelling u
 ### Built For
 * [Astronomer](https://www.astronomer.io/) as one of my many projects during my 2022 Spring internship.
 
-
+<!-- PROCESS -->
+## Process
+  
+  
+  
 <!-- LICENSE -->
 ## License
 
@@ -80,3 +86,5 @@ Project Link: [https://github.com/AmirZahre/Data_Analyst_DAG](https://github.com
 [forks-url]: https://github.com/AmirZahre/Data_Analyst_Dag/network/members
 [cSize-shield]: https://img.shields.io/github/languages/code-size/AmirZahre/Data_Analyst_Dag
 [cSize-url]: https://github.com/AmirZahre/Data_Analyst_DAG
+[diagram]: images/workflow.png
+[tasks]: images/task_dependencies.png

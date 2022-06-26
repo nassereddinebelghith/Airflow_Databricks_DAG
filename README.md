@@ -48,6 +48,11 @@ Databricks is powerful, as is Apache Airflow. Together, they make a compelling u
 
 ### Built For
 * [Astronomer](https://www.astronomer.io/) as one of my many projects during my 2022 Spring internship.
+  
+### Important Files (i.e. my code)
+* [Airflow File](https://github.com/AmirZahre/Data_Analyst_DAG/blob/main/dags/databricks.py)
+* [Databricks Workbook](https://github.com/AmirZahre/Data_Analyst_DAG/blob/main/dag-workshop.ipynb)
+
 
 <!-- PROCESS -->
 ## Use Case
@@ -65,7 +70,7 @@ Let’s look into this Data Analysts workflow.
   
 ## Process
 ### Part 1: Airflow triggers Databricks notebook with parameters
-  Step 1: <br>
+  <b>Step 1:</b>
   Passing Parameters from Airflow using <b>notebook_params = portfolio</b>
   
 ```
@@ -84,10 +89,21 @@ Let’s look into this Data Analysts workflow.
 ```
 <br>
   
-  Step 2: <br>
+  <b>Step 2:</b>
   Retrieving Parameters in Databricks
   Use dbutils.widgets.text(param, default_value) to load params pushed by Airflow into the Databricks notebook.
   [![param_get]](#)  
+
+  
+### Part 2: Data ingestion & transformations
+  <b>Step 1:</b>
+  Invoking the API
+  Pull market cap data from Yahoo Finance using the yfinance Python package 
+  [![invoke_api]](#) 
+  
+  <b>Step 2:</b>
+  Aggregating Market Cap. by Industry Sector<br>
+  [![aggregate_mkt_cap]](#) 
 
   
 <!-- LICENSE -->
@@ -126,3 +142,6 @@ Project Link: [https://github.com/AmirZahre/Data_Analyst_DAG](https://github.com
 [tasks]: images/task_dependencies.png
 [param_get]: images/param_get.png
 [param_check]: images/param_check.png
+[invoke_api]
+[aggregate_mkt_cap]
+  

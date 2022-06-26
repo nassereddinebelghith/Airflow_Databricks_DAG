@@ -195,7 +195,7 @@ Project Link: [https://github.com/AmirZahre/Data_Analyst_DAG](https://github.com
 
   
 <!-- MARKDOWN LINKS & IMAGES -->
-[license-shield]: https://img.shields.io/github/license/AmirZahre/Data_Analyst_DAG
+[license-shield]: https://img.shields.io/github/license/AmirZahre/Data_Analyst_DAG?color=blueviolet
 [license-url]: https://github.com/AmirZahre/Data_Analyst_DAG/blob/main/LICENSE.md
 [issues-shield]: https://img.shields.io/github/issues/AmirZahre/Data_Analyst_DAG
 [issues-url]: https://github.com/AmirZahre/Data_Analyst_DAG/issues

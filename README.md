@@ -120,7 +120,7 @@ Let’s look into this Data Analysts workflow.
   [![percent_change]](#) 
   
   <b>Step 2:</b>
-  Exit the Databricks Notebook with output data, which is subsequently captured by Airflow and passed around via. XCOM.
+  Exit the Databricks Notebook with output data, which is subsequently captured by Airflow and passed around via. XCOM.<br>
   [![xcom]](#) 
   
   <b>Step 3:</b>

@@ -69,11 +69,11 @@ Let’s look into this Data Analysts workflow.
   
   
 ## Process
-### Part 1: Airflow triggers Databricks notebook with parameters
+### Part 1: Airflow Triggers Databricks Notebook While Passing Parameters
   <b>Step 1:</b>
   Passing Parameters from Airflow using <b>notebook_params = portfolio</b>
   
-```
+```python
   portfolio = {
                "stocks": "MSFT AAPL IBM WMT SHOP GOOGL TSLA GME AMZN COST COKE CBRE NVDA AMD PG"
                }
@@ -95,7 +95,7 @@ Let’s look into this Data Analysts workflow.
   [![param_get]](#)  
 
   
-### Part 2: Data ingestion & transformations
+### Part 2: Data ingestion & Transformations
   <b>Step 1:</b>
   Invoking the API
   Pull market cap data from Yahoo Finance using the yfinance Python package 
@@ -105,6 +105,24 @@ Let’s look into this Data Analysts workflow.
   Aggregating Market Cap. by Industry Sector<br>
   [![aggregate_mkt_cap]](#) 
 
+  
+ ### Part 3: Enjoying the View, A (Delta) Table on a (Delta) Lake
+  <b>Step 1:</b>
+  Transform pandas df into Spark df
+  [![to_spark]](#) 
+  
+  <b>Step 2:</b>
+  Write Spark df to Delta Table
+  [![to_delta]](#) 
+  
+  <b>Step 3: (Optional)>/b>
+  Viewing the Delta Table using Databricks UI
+  [![db_view_tables]](#)
+  [![db_open_tables]](#)
+  
+  
+  
+  
   
 <!-- LICENSE -->
 ## License
@@ -142,6 +160,10 @@ Project Link: [https://github.com/AmirZahre/Data_Analyst_DAG](https://github.com
 [tasks]: images/task_dependencies.png
 [param_get]: images/param_get.png
 [param_check]: images/param_check.png
-[invoke_api]
-[aggregate_mkt_cap]
+[invoke_api]: images/invoke_api.png
+[aggregate_mkt_cap]: images/aggregate_mkt_cap.png
+[to_spark]: images/to_spark.png
+[to_delta]: images/to_delta.png
+[db_view_tables]: images/db_view_tables.png
+[db_open_tables]: images/db_open_tables.png
   

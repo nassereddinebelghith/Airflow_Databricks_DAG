@@ -52,11 +52,11 @@ Databricks is powerful, as is Apache Airflow. Together, they make a compelling u
 <!-- PROCESS -->
 ## Use Case
   
-> Imagine a Data Analyst who works for an investment management firm, helping clients make good decisions about their investment portfolios. To do so, the Data Analyst retrieves market data regularly, and for each client provides an analysis of how the industries they are invested in perform.
->
-> The Data Analyst persists the transformed data from analyses, sends automated notifications to clients to take action when relevant, and keeps a dashboard up to date for them to check their investment health at a glance.
->
-> Let’s look into this Data Analysts workflow.
+Imagine a Data Analyst who works for an investment management firm, helping clients make good decisions about their investment portfolios. To do so, the Data Analyst retrieves market data regularly, and for each client provides an analysis of how the industries they are invested in perform.
+
+The Data Analyst persists the transformed data from analyses, sends automated notifications to clients to take action when relevant, and keeps a dashboard up to date for them to check their investment health at a glance.
+
+Let’s look into this Data Analysts workflow.
   
   
   
@@ -65,7 +65,8 @@ Databricks is powerful, as is Apache Airflow. Together, they make a compelling u
   
 ## Process
 ### Part 1: Airflow triggers Databricks notebook with parameters
-  Step 1: Passing Parameters from Airflow using <b>notebook_params = portfolio</b>
+  Step 1: <br>
+  Passing Parameters from Airflow using <b>notebook_params = portfolio</b>
   
 ```
   portfolio = {
@@ -81,9 +82,16 @@ Databricks is powerful, as is Apache Airflow. Together, they make a compelling u
        notebook_params = portfolio
    )
 ```
-  Step 2: Retrieving Parameters in Databricks
+<br>
+  
+  Step 2: <br>
+  Retrieving Parameters in Databricks
   Use dbutils.widgets.text(param, default_value) to load params pushed by Airflow into the Databricks notebook.
   [![param_get]](#)  
+  
+  Step 3 (Optional): <br>
+  Check the parameters in the Databricks UI after the notebook runs.
+  [![param_check]](#)  
 
   
 <!-- LICENSE -->
@@ -121,3 +129,4 @@ Project Link: [https://github.com/AmirZahre/Data_Analyst_DAG](https://github.com
 [diagram]: images/workflow.png
 [tasks]: images/task_dependencies.png
 [param_get]: images/param_get.png
+[param_check]: images/param_check.png

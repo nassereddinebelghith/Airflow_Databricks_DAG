@@ -12,7 +12,8 @@
   <p align="center">
     A simple, scalable use case utilizing Apache Airflow, Databricks, Delta Tables, & PySpark!
     <br />
-    <a href="https://github.com/AmirZahre/Data_Analyst_DAG/"><strong>Checkout the code »</strong></a>
+    <a href="https://github.com/AmirZahre/Data_Analyst_DAG/blob/main/dags/databricks.py"><strong>Checkout the Airflow code »</strong></a><br>
+    <a href="https://github.com/AmirZahre/Data_Analyst_DAG/blob/main/dag-workshop.ipynb"><strong>Checkout the Databricks code »</strong></a>
     <br />
     <br />
     <a href="https://github.com/AmirZahre/Data_Analyst_DAG/releases/tag/Astronomer">Download</a>
@@ -29,6 +30,10 @@
 
 * [About the Project](#about-the-project)
   * [Built With](#built-with)
+  * [Built For](#built-for)
+  * [Important Files (i.e. my code)](#important-files)
+* [Use Case](#use-case)
+* [Process](#process)
 * [License](#license)
 * [Contact](#contact)
 * [Acknowledgements](#acknowledgements)
@@ -49,7 +54,7 @@ Databricks is powerful, as is Apache Airflow. Together, they make a compelling u
 ### Built For
 * [Astronomer](https://www.astronomer.io/) as one of my many projects during my 2022 Spring internship.
   
-### Important Files (i.e. my code)
+### Important Files
 * [Airflow File](https://github.com/AmirZahre/Data_Analyst_DAG/blob/main/dags/databricks.py)
 * [Databricks Workbook](https://github.com/AmirZahre/Data_Analyst_DAG/blob/main/dag-workshop.ipynb)
 
@@ -63,11 +68,7 @@ The Data Analyst persists the transformed data from analyses, sends automated no
 
 Let’s look into this Data Analysts workflow.
   
-  
-  
- 
-  
-  
+
 ## Process
 ### Part 1: Airflow Triggers Databricks Notebook While Passing Parameters.
   <b>Step 1:</b>

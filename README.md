@@ -52,7 +52,7 @@ Databricks is powerful, as is Apache Airflow. Together, they make a compelling u
 * [Databricks](https://databricks.com/)
 
 ### Built For
-* [Astronomer](https://www.astronomer.io/) as one of my many projects during my 2022 Winter internship.
+* [Astronomer](https://www.astronomer.io/) as one of my many projects during my 2022 Winter/Spring internship.
   
 ### Important Files
 * [Airflow File](https://github.com/AmirZahre/Data_Analyst_DAG/blob/main/dags/databricks.py)

@@ -74,3 +74,14 @@ Project Link: [https://github.com/AmirZahre/Data_Analyst_DAG](https://github.com
 * [Santona Tuli](https://www.linkedin.com/in/santona-tuli/) for being an awesome mentor towards my introduction to DevOps!
 * [The team @ Astronomer](https://www.astronomer.io/) for help with any questions that arose while learning Airflow.
 * [Ran Aroussi](https://pypi.org/user/ranaroussi/) for creating a fabulous Yahoo Finance API library for Python.
+
+  
+<!-- MARKDOWN LINKS & IMAGES -->
+[license-shield]: https://img.shields.io/github/license/jlemanski1/BMI-Calculator
+[license-url]: https://github.com/jlemanski1/BMI-Calculator/blob/master/LICENSE
+[issues-shield]: https://img.shields.io/github/issues/jlemanski1/BMI-Calculator
+[issues-url]: https://github.com/jlemanski1/BMI-Calculator/issues
+[forks-shield]: https://img.shields.io/github/forks/jlemanski1/BMI-Calculator
+[forks-url]: https://github.com/jlemanski1/BMI-Calculator/network/members
+[cSize-shield]: https://img.shields.io/github/languages/code-size/jlemanski1/BMI-Calculator
+[cSize-url]: https://github.com/jlemanski1/BMI-Calculator

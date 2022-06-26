@@ -69,9 +69,9 @@ Let’s look into this Data Analysts workflow.
   
   
 ## Process
-### Part 1: Airflow Triggers Databricks Notebook While Passing Parameters
+### Part 1: Airflow Triggers Databricks Notebook While Passing Parameters.
   <b>Step 1:</b>
-  Passing Parameters from Airflow using <b>notebook_params = portfolio</b>
+  Pass parameters from Airflow using <b>notebook_params = portfolio</b>
   
 ```python
   portfolio = {
@@ -90,38 +90,84 @@ Let’s look into this Data Analysts workflow.
 <br>
   
   <b>Step 2:</b>
-  Retrieving Parameters in Databricks
   Use dbutils.widgets.text(param, default_value) to load params pushed by Airflow into the Databricks notebook.
   [![param_get]](#)  
 
   
 ### Part 2: Data ingestion & Transformations
   <b>Step 1:</b>
-  Invoking the API
-  Pull market cap data from Yahoo Finance using the yfinance Python package 
+  Invoking the API, we pull today's market cap data from Yahoo Finance using the yfinance Python package.
   [![invoke_api]](#) 
   
-  <b>Step 2:</b>
-  Aggregating Market Cap. by Industry Sector<br>
+  <b>Step 2:</b> Aggregate today's market cap data by Industry Sector<br>
   [![aggregate_mkt_cap]](#) 
 
   
- ### Part 3: Enjoying the View, A (Delta) Table on a (Delta) Lake
+### Part 3: Enjoying the View, A (Delta) Table on a (Delta) Lake
   <b>Step 1:</b>
-  Transform pandas df into Spark df
+  Transform the pandas dataframe into a Spark dataframe. Write that dataframe into a temporary Delta Table.
   [![to_spark]](#) 
   
   <b>Step 2:</b>
-  Write Spark df to Delta Table
-  [![to_delta]](#) 
+  Upsert the temp Delta Table (containing today's data) into the permanent Delta Table containing all previous historic data.
+  [![upsert]](#) 
   
-  <b>Step 3: (Optional)>/b>
-  Viewing the Delta Table using Databricks UI
-  [![db_view_tables]](#)
-  [![db_open_tables]](#)
+  <br><b>Going forward, you can now link this table to Tableau for analysis.</b>
   
+### Part 4: Monitoring portfolio performance & Email Notifications
+  <b>Step 1:</b>
+  Determining the Percentage Change from Day Prior
+  [![percent_change]](#) 
   
+  <b>Step 2:</b>
+  Exit the Databricks Notebook with output data, which is subsequently captured by Airflow and passed around via. XCOM.
+  [![xcom]](#) 
   
+  <b>Step 3:</b>
+  Ingesting results in Airflow: This data is picked up using the DatabricksHook and assigned to the variable model_uri.
+  ```python
+  @task
+   def Retreive_Databricks_Output(id):
+
+       # retrieve xcom data using DatabricksHook
+       databricks_hook = DatabricksHook()
+       model_uri = databricks_hook.get_run_output(id)['notebook_output']['result']
+
+       return model_uri
+
+   # Variable "Output" contains the xcom data from Databricks
+   retreive_databricks_output = Retreive_Databricks_Output(run_databricks_job.output['run_id'])
+  ```
+  
+  <b>Step 4:</b>
+  Using the BranchPythonOperator to decide whether to notify
+  ```python
+     # Decide as to whether or not an email should be sent based on the content of Output
+   branching = BranchPythonOperator(
+       task_id='Check_if_Email_is_Needed',
+       op_args = [retreive_databricks_output],
+       python_callable=_split,
+   )
+
+   def _split(data):
+       if data == "No Email Required":
+           print("LOG: No big movers, no email was sent")
+           return 'No_Email_Required'
+       else:
+           return 'Send_Email'
+  ```
+  
+  <b>Step 5:</b>
+  Send email notification.
+  ```python
+     # Send email containing the content of the xcom
+   mail = EmailOperator(
+       task_id='Send_Email',
+       to='your_email@gmail.com',
+       subject='Daily Movers',
+       html_content=retreive_databricks_output,
+       )
+  ```
   
   
 <!-- LICENSE -->
@@ -163,7 +209,8 @@ Project Link: [https://github.com/AmirZahre/Data_Analyst_DAG](https://github.com
 [invoke_api]: images/invoke_api.png
 [aggregate_mkt_cap]: images/aggregate_mkt_cap.png
 [to_spark]: images/to_spark.png
-[to_delta]: images/to_delta.png
-[db_view_tables]: images/db_view_tables.png
-[db_open_tables]: images/db_open_tables.png
+[upsert]: images/upsert.png
+[percent_change]: images/percent_change.png
+[xcom]: images/xcom.png
+  
   

@@ -88,10 +88,6 @@ Let’s look into this Data Analysts workflow.
   Retrieving Parameters in Databricks
   Use dbutils.widgets.text(param, default_value) to load params pushed by Airflow into the Databricks notebook.
   [![param_get]](#)  
-  
-  Step 3 (Optional): <br>
-  Check the parameters in the Databricks UI after the notebook runs.
-  [![param_check]](#)  
 
   
 <!-- LICENSE -->

@@ -40,7 +40,7 @@
 [![diagram]](#)  
 
 Databricks is powerful, as is Apache Airflow. Together, they make a compelling use case for a well-rounded, all-you-need stack for many of your data pipeline needs. This project showcases the utilization of Databricks to extract, manipulate, and upsert data into its Delta Table infrastructure, all nicely wrapped (and automated!) with Apache Airflow.
-
+  
 ### Built With
 * [Python](https://www.python.org/)
 * [Apache Airflow](https://airflow.apache.org/)
@@ -50,14 +50,46 @@ Databricks is powerful, as is Apache Airflow. Together, they make a compelling u
 * [Astronomer](https://www.astronomer.io/) as one of my many projects during my 2022 Spring internship.
 
 <!-- PROCESS -->
+## Use Case
+  
+> Imagine a Data Analyst who works for an investment management firm, helping clients make good decisions about their investment portfolios. To do so, the Data Analyst retrieves market data regularly, and for each client provides an analysis of how the industries they are invested in perform.
+>
+> The Data Analyst persists the transformed data from analyses, sends automated notifications to clients to take action when relevant, and keeps a dashboard up to date for them to check their investment health at a glance.
+>
+> Let’s look into this Data Analysts workflow.
+  
+  
+  
+ 
+  
+  
 ## Process
+### Part 1: Airflow triggers Databricks notebook with parameters
+  Step 1: Passing Parameters from Airflow using <b>notebook_params = portfolio</b>
   
-  
+```
+  portfolio = {
+               "stocks": "MSFT AAPL IBM WMT SHOP GOOGL TSLA GME AMZN COST COKE CBRE NVDA AMD PG"
+               }
+
+   # Run the Databricks job and retrieve the job Run ID
+   run_databricks_job = DatabricksRunNowOperator(
+       task_id="Run_Databricks_Job",
+       databricks_conn_id=DATABRICKS_CONNECTION_ID,
+       job_id=137122987688189,
+       do_xcom_push=True,
+       notebook_params = portfolio
+   )
+```
+  Step 2: Retrieving Parameters in Databricks
+  Use dbutils.widgets.text(param, default_value) to load params pushed by Airflow into the Databricks notebook.
+  [![param_get]](#)  
+
   
 <!-- LICENSE -->
 ## License
 
-Distributed under the GPL-3.0 License. See `LICENSE` for more information.
+Distributed under Apache License 2.0. See `LICENSE` for more information.
 
 
 
@@ -88,3 +120,4 @@ Project Link: [https://github.com/AmirZahre/Data_Analyst_DAG](https://github.com
 [cSize-url]: https://github.com/AmirZahre/Data_Analyst_DAG
 [diagram]: images/workflow.png
 [tasks]: images/task_dependencies.png
+[param_get]: images/param_get.png

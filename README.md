@@ -77,11 +77,11 @@ Project Link: [https://github.com/AmirZahre/Data_Analyst_DAG](https://github.com
 
   
 <!-- MARKDOWN LINKS & IMAGES -->
-[license-shield]: https://img.shields.io/github/license/jlemanski1/BMI-Calculator
-[license-url]: https://github.com/jlemanski1/BMI-Calculator/blob/master/LICENSE
-[issues-shield]: https://img.shields.io/github/issues/jlemanski1/BMI-Calculator
-[issues-url]: https://github.com/jlemanski1/BMI-Calculator/issues
-[forks-shield]: https://img.shields.io/github/forks/jlemanski1/BMI-Calculator
-[forks-url]: https://github.com/jlemanski1/BMI-Calculator/network/members
-[cSize-shield]: https://img.shields.io/github/languages/code-size/jlemanski1/BMI-Calculator
-[cSize-url]: https://github.com/jlemanski1/BMI-Calculator
+[license-shield]: https://img.shields.io/github/license/AmirZahre/Data_Analyst_DAG
+[license-url]: https://github.com/AmirZahre/Data_Analyst_DAG/blob/main/LICENSE.md
+[issues-shield]: https://img.shields.io/github/issues/AmirZahre/Data_Analyst_DAG
+[issues-url]: https://github.com/AmirZahre/Data_Analyst_DAG/issues
+[forks-shield]: https://img.shields.io/github/forks/AmirZahre/Data_Analyst_DAG
+[forks-url]: https://github.com/AmirZahre/Data_Analyst_Dag/network/members
+[cSize-shield]: https://img.shields.io/github/languages/code-size/AmirZahre/Data_Analyst_Dag
+[cSize-url]: https://github.com/AmirZahre/Data_Analyst_DAG

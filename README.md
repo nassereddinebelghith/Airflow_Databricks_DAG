@@ -12,8 +12,8 @@
   <p align="center">
     A simple, scalable use case utilizing Apache Airflow, Databricks, Delta Tables, & PySpark!
     <br />
-    <a href="https://github.com/AmirZahre/Data_Analyst_DAG/blob/main/dags/databricks.py"><strong>Checkout the Airflow code »</strong></a><br>
-    <a href="https://github.com/AmirZahre/Data_Analyst_DAG/blob/main/dag-workshop.ipynb"><strong>Checkout the Databricks code »</strong></a>
+    <a href="https://github.com/AmirZahre/Data_Analyst_DAG/blob/main/dags/databricks.py"><strong>Check out the Airflow code »</strong></a><br>
+    <a href="https://github.com/AmirZahre/Data_Analyst_DAG/blob/main/dag-workshop.ipynb"><strong>Check out the Databricks code »</strong></a>
     <br />
     <br />
     <a href="https://github.com/AmirZahre/Data_Analyst_DAG/releases/tag/Astronomer">Download</a>
